@@ -32,15 +32,16 @@ This is a simple command-line interface (CLI) application written in PHP for man
    php task-cli mark-done 1
 ```
 
-
-# Listing all tasks
-task-cli list
-
-# Listing tasks by status
-task-cli list done
-task-cli list todo
-task-cli list in-progress
-
+- Listing all tasks
+```bash
+   php task-cli list
+```
+- Listing tasks by status
+```bash
+   php task-cli list done
+   php task-cli list todo
+   php task-cli list in-progress
+```
 
 
 ## Installation
@@ -51,20 +52,10 @@ task-cli list in-progress
    ```bash
    git clone https://github.com/mdahanaf/tasks-cli.git
    ```
-2. Run `setup.sh` script
-    - On UNIX machine probably u need to first add permission to execute
 
-     ```bash
-     chmod -x setup.sh
-     ```
-
-    And then run script
-    ```bash
-   ./setup.sh
-   ```
-3. Now u can easily add your first task via CLI 🚀
-     - Example
+2. And done. Now you can easily add your first task via CLI 🚀
+     - For example
          ```bash
-        task-cli add "Buy groceries"
+        php task-cli add "Buy groceries"
          ```
   
