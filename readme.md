@@ -1,6 +1,6 @@
-# TODO Task Tracker CLI - PHP Application
+# Task Tracker CLI - PHP Application (Inspired by roadmap.sh)
 
-This is a simple command-line interface (CLI) application written in PHP for managing tasks. It allows users to create, view, update, and delete tasks, as well as manage their task list through a local JSON file. This README provides detailed information on how to install, configure, and use the application, along with its full set of functionalities.
+This is a lightweight command-line application built with PHP to help you manage your tasks with ease. It lets you create, view, update, and delete tasks, all stored locally in a simple JSON file. This README.md walks you through the steps to install, set up, and use the application, and gently explains all the features it offers.
 
 ## Features:
 
@@ -11,13 +11,13 @@ This is a simple command-line interface (CLI) application written in PHP for man
 - **List all tasks that are not done**
 - **List all tasks that are in progress**
 
-**Project Idea**: https://roadmap.sh/projects/task-tracker
+**Project Details**: https://roadmap.sh/projects/task-tracker
 
 ## The list of commands and their usage is given below:
 
 - Adding a new task
 ```bash
-     php task-cli add "Buy groceries"
+   php task-cli add "Buy groceries"
 ```
 
 - Updating and deleting tasks
