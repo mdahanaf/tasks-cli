@@ -1,0 +1,163 @@
+#!/usr/bin/env php
+<?php
+// helpers function
+function dd(...$datas)
+{
+    foreach ($datas as $data) {
+        var_dump($data);
+    }
+    die();
+}
+
+function show(array $data)
+{
+    if(count($data) == 0){
+        echo "No task found. Use 'add' command to add new task.";
+        return;
+    }
+
+    echo "id => description => status => createdAt => updatedAt\n\n";
+    foreach ($data as $d) {
+        if ($d['updatedAt'] == null) $d['updatedAt'] = "Null";
+        echo $d['id'] . " => " . $d['description'] . " => " . $d['status'] . " => " . $d['createdAt'] . " => " . $d['updatedAt'] . "\n\n";
+    }
+}
+$argv = $_SERVER['argv'];
+$argc = $_SERVER['argc'];
+
+if($argc == 1){
+    echo "Missing more argument. use 'add' command to add task.";
+}
+
+
+$filename = 'tasks.json';
+if (! file_exists($filename)) {
+    file_put_contents($filename, json_encode([]));
+}
+
+
+$file_data_array = json_decode(file_get_contents($filename), true);
+
+if (file_get_contents($filename) == "") {
+    $next_id = 1;
+} else {
+    $next_id = count($file_data_array) + 1;
+}
+
+
+if ($argc == 2){
+    [$file_name, $command] = $argv;
+    if($command === 'list'){
+        show($file_data_array);
+    }
+}
+
+
+if ($argc == 3) {
+
+    [$file_name, $command, $value] = $argv;
+    if ($command === 'add') {
+        $arr = [
+            "id" => $next_id,
+            "description" => $value,
+            "status" => "todo",
+            "createdAt" => date("d-m-Y || h:i:s A"),
+            "updatedAt" => null,
+        ];
+
+        array_push($file_data_array, $arr);
+        file_put_contents($filename, json_encode(array_values($file_data_array), JSON_PRETTY_PRINT));
+    } else if ($command === 'delete') {
+
+        $isIdFound = false;
+        foreach ($file_data_array as $i => $record) {
+            if ($record['id'] == $value) {
+                echo "Task - '". $record['description'] ."' - deleted successfully.";
+                unset($file_data_array[$i]);
+                
+
+                file_put_contents($filename, json_encode(array_values($file_data_array), JSON_PRETTY_PRINT));
+                $isIdFound = true;
+                break;
+            }
+        }
+        if(! $isIdFound) echo "Id not found. Check and try again.";
+
+    }else if($command == 'list' && $value == 'todo'){
+        $temp_array = [];
+        foreach($file_data_array as $i => $record){
+            if($record['status'] == 'todo'){
+                array_push($temp_array, $file_data_array[$i]);
+            }
+        }
+        show($temp_array);
+    }else if($command == 'list' && $value == 'done'){
+        $temp_array = [];
+        foreach($file_data_array as $i => $record){
+            if($record['status'] == 'done'){
+                array_push($temp_array, $file_data_array[$i]);
+            }
+        }
+        show($temp_array);
+    }else if($command == 'list' && $value == 'in-progress'){
+        $temp_array = [];
+        foreach($file_data_array as $i => $record){
+            if($record['status'] == 'in-progress'){
+                array_push($temp_array, $file_data_array[$i]);
+            }
+        }
+        show($temp_array);
+    }else if ($command === 'mark-in-progress') {
+        $id = $value;
+        foreach ($file_data_array as $i => $record) {
+            
+            if ($record['id'] == $id) {
+                $file_data_array[$i]['status'] = "in-progress";
+                $file_data_array[$i]['updatedAt'] = date("d-m-Y || h:i:s A");
+
+                file_put_contents($filename, json_encode(array_values($file_data_array), JSON_PRETTY_PRINT));
+
+                echo "Status edited successfully";
+                break;
+            }
+        }
+        
+    }else if ($command === 'mark-done') {
+        $id = $value;
+        foreach ($file_data_array as $i => $record) {
+            
+            if ($record['id'] == $id) {
+                $file_data_array[$i]['status'] = "done";
+                $file_data_array[$i]['updatedAt'] = date("d-m-Y || h:i:s A");
+
+                file_put_contents($filename, json_encode(array_values($file_data_array), JSON_PRETTY_PRINT));
+
+                echo "Status edited successfully";
+                break;
+            }
+        }
+        
+    }
+}
+
+if ($argc == 4) {
+    
+    [$file_name, $command, $id, $value] = $argv;
+    
+    if ($command === 'update') {
+        $isIdFound = false;
+        foreach ($file_data_array as $i => $record) {
+            if ($record['id'] == $id) {
+                $file_data_array[$i]['description'] = $value;
+                $file_data_array[$i]['updatedAt'] = date("d-m-Y || h:i:s A");
+
+                file_put_contents($filename, json_encode(array_values($file_data_array), JSON_PRETTY_PRINT));
+
+                echo "Task description updated successfully.";
+                $isIdFound = true;
+                break;
+            }
+        }
+        if(! $isIdFound) echo "Id not found. Check and try again";
+    }
+}
