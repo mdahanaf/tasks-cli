@@ -67,6 +67,7 @@ if ($argc == 3) {
 
         array_push($file_data_array, $arr);
         file_put_contents($filename, json_encode(array_values($file_data_array), JSON_PRETTY_PRINT));
+        echo "Task added successfully (ID: $next_id)";
     } else if ($command === 'delete') {
 
         $isIdFound = false;
